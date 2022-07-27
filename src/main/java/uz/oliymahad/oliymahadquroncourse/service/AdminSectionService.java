@@ -19,6 +19,7 @@ import java.util.List;
 
 import static uz.oliymahad.oliymahadquroncourse.service.marker.PanelSectionConstants.*;
 
+
 @Service
 @RequiredArgsConstructor
 public class AdminSectionService {
@@ -76,19 +77,19 @@ public class AdminSectionService {
     }
 
     public AdminSection getGroup(Pageable pageable, Section section) {
-        AdminSection adminSection = new AdminSection();
+        AdminSection adminSection = modelMapper.map(getPermission(section), AdminSection.class);
         adminSection.setHeaders(List.of("id", "name", "memberCount", "startDate", "courseName", "courseId"));
         APIResponse apiResponse = groupService.pageOf(pageable);
         adminSection.setBody(apiResponse.getData());
-        modelMapper.map(getPermission(section), adminSection);
         return adminSection;
     }
 
     public AdminSection getQueue(Pageable pageable, Section section) {
         AdminSection adminSection = new AdminSection();
         adminSection.setHeaders(List.of("id", "userId", "firstName", "lastName", "phoneNumber", "courseName", "appliedDate", "endDate"));
-        APIResponse apiResponse = queueService.pageOf(pageable);
-        adminSection.setBody(apiResponse.getData());
+        adminSection.setBody(queueService.pageOf(pageable).getData());
+
+
         modelMapper.map(getPermission(section), adminSection);
         return adminSection;
     }
@@ -103,6 +104,5 @@ public class AdminSectionService {
                 .delete((flag & section.getDelete()) > 0)
                 .info((flag & section.getInfo()) > 0)
                 .build();
-
     }
 }
