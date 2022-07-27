@@ -1,0 +1,103 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    #    url: jdbc:postgresql://db-collectin.cg1bn5mbcm4e.us-east-1.rds.amazonaws.com:5432/db_collect_in
+    url: jdbc:postgresql://localhost:5432/db_oliy_mahad
+    username: postgres
+    password: 1596psql
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create-drop
+
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            clientId: 233949405420-g8mhcvuiup5birvj704sqictd69p50d7.apps.googleusercontent.com
+            clientSecret: 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
+            redirectUri: "{baseUrl}/oauth2/callback/{registrationId}"
+            scope:
+              - email
+              - profile
+          facebook:
+            clientId: 2133731386805721
+            clientSecret: 88a56d10299e42bba111000ee6f62f34
+            redirectUri: "{baseUrl}/oauth2/callback/{registrationId}"
+            scope:
+              - email
+              - public_profile
+          github:
+            clientId: 748acff4c2f38d0541a3
+            clientSecret: 2e702ced9f775830e79747be1fec739364446cc0
+            redirectUri: "{baseUrl}/oauth2/callback/{registrationId}"
+            scope:
+              - user:email
+              - read:user
+        provider:
+          facebook:
+            authorizationUri: https://www.facebook.com/v3.0/dialog/oauth
+            tokenUri: https://graph.facebook.com/v3.0/oauth/access_token
+            userInfoUri: https://graph.facebook.com/v3.0/me?fields=id,first_name,middle_name,last_name,name,email,verified,is_verified,picture.width(250).height(250)
+
+  data:
+    web:
+      pageable:
+        page-parameter: page
+        size-parameter: size
+        default-page-size: 20
+
+
+
+app:
+  auth:
+    tokenSecret: 04ca023b39512e46d0c2cf4b48d5aac61d34302994c87ed4eff225dcf3b0a218739f3897051a057f9b846a69ea2927a587044164b7bae5e1306219d50b588cb1
+    tokenExpirationMsec: 864000000
+  cors:
+    allowedOrigins: http://localhost:3000,http://localhost:8080
+  oauth2:
+    authorizedRedirectUris:
+      - http://localhost:3000/oauth2/redirect
+
+jwt:
+  access:
+    secret:
+      key: mysupersecretkey_w243t5@dvbsWEF#aegLNUGPn$dfvrom%fbwr4330$rfsvmaetr>
+    expiration:
+      time: 1200000
+  refresh:
+    secret:
+      key: mysupersecretkey^fdsgZXSS*efwget()efgwwWEF3$!fdsg49302rAEFWRggjOHI>
+    expiration:
+      time: 3600000
+
+firebase:
+  bucket:
+    name: collectin-3959d.appspot.com
+  image:
+    url: https://firebasestorage.googleapis.com/v0/b/${firebase.bucket.name}/o/%s?alt=media
+  project:
+    id: collectin-3959d
+api:
+  info:
+    title: CollectIn
+    description: This is online collection managment web-site. You can collect and save anything you want!
+    version: 1.0
+    termOfService: https://github.com/exe-11/collect_in.git
+    contact-name: CollectIn team
+    contact-email: https://github.com/exe-11/collect_in.git
+    contact-url: https://github.com/exe-11/collect_in.git
+    license-name: Apache 2.0
+    license-url: https://www.apache.org/licenses/LICENSE-2.0.html
+
+springdoc:
+  swagger-ui:
+    path: swagger-ui
+  api-docs:
+    path: /api-docs
+
+

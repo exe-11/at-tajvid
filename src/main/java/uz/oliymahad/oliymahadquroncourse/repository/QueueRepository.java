@@ -1,0 +1,44 @@
+package uz.oliymahad.oliymahadquroncourse.repository;
+
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
+import uz.oliymahad.oliymahadquroncourse.entity.Queue;
+
+import java.util.List;
+import java.util.Optional;
+
+@Repository
+public interface QueueRepository extends JpaRepository<Queue, Long> {
+
+    @Query("select q from Queue q where q.user.id = ?1")
+    List<Queue> findAllByUserId(List<Long> userIds);
+
+    Optional<Queue> findByUserId(Long userId);
+
+
+//
+//    @Query(value = "select rank from (select user_id,applieddate, rank() over (order by applieddate) from queue_entity where course_id = :courseId) as sub where user_id = :userId", nativeQuery = true)
+//    List<Long> getUserCourseQueue(@Param("userId") Long userId, @Param("courseId") Long courseId);
+//
+//    @Query(value = "select * from (select *,RANK() over(order by applieddate asc) from queue_entity q inner join users u on q.user_id = u.id inner join user_register_details urd on u.id = urd.user_id where q.course_id = :courseId and q.status = :status and urd.gender = :gender ) as sub  limit :limit", nativeQuery = true)
+//    List<Queue> filterByCourseStatusGenderLimitForGroups(@Param("courseId") Long courseId, @Param("status") String status, @Param("gender") String gender, @Param("limit") int limit);
+//
+//
+//    @Query(value = "select *from filter_all_parameters1(i_user_id := :userId, i_gender := :gender, i_status := :status, i_course_id := :courseId)", nativeQuery = true)
+//    List<Queue> getQueueByFilter(
+//            @Param("userId") Long userId,
+//            @Param("gender") String gender,
+//            @Param("status") String status,
+//            @Param("courseId") Long courseId
+//
+//    );
+//
+//    @Query(value = "select * from queue q where q.status = :status", nativeQuery = true)
+//    Page<Queue> findAllByStatus(@Param("status") String status, Pageable pageable);
+
+}
