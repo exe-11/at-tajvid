@@ -7,6 +7,7 @@ import uz.oliymahad.oliymahadquroncourse.exception.DataNotFoundException;
 
 import java.util.Date;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class ConfirmationTokenProvider {
@@ -25,6 +26,15 @@ public class ConfirmationTokenProvider {
         final Date creationDate = new Date();
         final Date expiryDate = new Date(creationDate.getTime() + EXPIRATION_TIME);
         return repository.save(new ConfirmationToken(creationDate, expiryDate, user));
+    }
+
+    public ConfirmationToken update(final ConfirmationToken confirmationToken){
+        final Date creationDate = new Date();
+        final Date expiryDate = new Date(creationDate.getTime() + EXPIRATION_TIME);
+        confirmationToken.setToken(UUID.randomUUID().toString());
+        confirmationToken.setCreationDate(creationDate);
+        confirmationToken.setExpiryDate(expiryDate);
+        return confirmationToken;
     }
 
     public Optional<ConfirmationToken> get(final String token){
