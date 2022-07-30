@@ -4,6 +4,7 @@ import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -39,12 +40,7 @@ public class JWTokenFilter extends OncePerRequestFilter {
         final String token = getTokenFromHeader(request);
         if (token != null) {
             try {
-                final Claims claims = jwTokenProvider.parseToken(token, false);
-                SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(
-                        claims.getSubject(),
-                        claims,
-                        getAuthorities(claims.get(ROLE_VALUE, Integer.class))
-                ));
+                jwTokenProvider.getAuthorities(token);
             } catch (Exception ex) {
                 setErrorResponse(ex.getMessage());
                 return;

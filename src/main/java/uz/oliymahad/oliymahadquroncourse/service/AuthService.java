@@ -5,6 +5,7 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import uz.oliymahad.oliymahadquroncourse.annotation.phone_num_constraint.RegistrationValidator;
@@ -18,6 +19,7 @@ import uz.oliymahad.oliymahadquroncourse.exception.UserPendingException;
 import uz.oliymahad.oliymahadquroncourse.payload.APIResponse;
 import uz.oliymahad.oliymahadquroncourse.payload.request.user.UserSigningRequest;
 import uz.oliymahad.oliymahadquroncourse.payload.response.JwtTokenResponse;
+import uz.oliymahad.oliymahadquroncourse.payload.response.user.UserDataResponse;
 import uz.oliymahad.oliymahadquroncourse.repository.UserRepository;
 import uz.oliymahad.oliymahadquroncourse.security.confirmatoin_token.ConfirmationToken;
 import uz.oliymahad.oliymahadquroncourse.security.confirmatoin_token.ConfirmationTokenProvider;
@@ -133,13 +135,14 @@ public class AuthService {
                     request.getPhoneNumberOrEmail(),
                     passwordEncoder.encode(request.getPassword())
             ));
+            user.setUserStatus(UserStatus.ACTIVE);
             final JwtTokenResponse tokenResponse = modelMapper.map(user, JwtTokenResponse.class);
             tokenResponse.setAccessToken(jwTokenProvider.generateAccessToken(user));
             return APIResponse.success(tokenResponse);
         }catch (UserPendingException exception){
 //            TODO - SMS verification must be added
         }
-        return APIResponse.success(HttpStatus.OK.name());
+        return APIResponse.error(HttpStatus.NOT_EXTENDED);
     }
 
 
@@ -171,6 +174,11 @@ public class AuthService {
         } else if (optionalUser.isPresent() && optionalUser.get().getUserStatus().equals(UserStatus.PENDING)) {
             throw new UserPendingException();
         }
+    }
+
+    public UserDataResponse getUser() {
+        final User principal = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return modelMapper.map(principal, UserDataResponse.class);
     }
 
 }

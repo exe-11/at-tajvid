@@ -16,7 +16,6 @@ import javax.persistence.*;
 @Setter
 @Entity(name = "course_entity")
 public class Course extends Auditable<String> {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

@@ -32,6 +32,8 @@ import uz.oliymahad.oliymahadquroncourse.service.core.PageProvider;
 import uz.oliymahad.oliymahadquroncourse.service.core.ResourcePage;
 
 import javax.persistence.PersistenceException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -141,6 +143,7 @@ public class GroupService implements CRUDService<
     }
 
     public APIResponse closeGroupOnSuccess(Long groupId){
+
         final Group group = groupRepository.findById(groupId).orElseThrow(() -> DataNotFoundException.of(GROUP, groupId));
         group.setGroupStatus(GroupStatus.COMPLETED);
         try{
